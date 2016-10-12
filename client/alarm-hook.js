@@ -10,18 +10,13 @@ module.exports = function(app) {
     // we force POSIX path because I do not understand why but windows separator (\) does not work.
     filePath = filePath.replace(new RegExp('\\' + path.sep, 'g'), '/');
 
-    // tel the ring is available
-    app.on("ring:io:connect", function() {
-
-    });
-
     // make sure io exist
-    app.once("ring:io:connect", function() {
+    app.once("io:connect", function() {
 
         // listen for ring start
         // We do not have to clean the listener as we listen once for the connect. It means that when reconnecting the event will start
         // firing again. We could have listen on connect and clean on disconnect as well.
-        app.io.on("event:ring:start", function() {
+        app.io.on("ring", function() {
             debug("new ring command");
             startAlarm();
         });

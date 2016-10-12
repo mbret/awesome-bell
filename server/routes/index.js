@@ -10,10 +10,11 @@ router.get('/', function(req, res) {
 });
 
 router.post("/ring", function(req, res) {
-    if (req.app.locals.socket) {
-        req.app.locals.socket.emit("event:ring:start");
+    if (req.app.locals.socketRingClient) {
+        console.info("send ring event");
+        req.app.locals.socketRingClient.emit("ring");
     }
-    return res.json();
+    return res.status(202).json();
 });
 
 router.get("/client", function(req, res) {

@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
 var app = require('../app');
 var debug = require('debug')('ring:server');
 var debugSocket = require('debug')('ring:socket');
@@ -22,9 +17,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 app.http = server;
-debugSocket("init connection" + app.locals.config.serverUrl);
-var socket = require('socket.io-client')(app.locals.config.serverUrl + "/client");
-app.io = socket;
+
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -33,16 +26,35 @@ app.io = socket;
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+var socketEndPoint = app.locals.config.serverUrl + "/client";
+debugSocket("connecting to " + socketEndPoint + "...");
+var socket = require('socket.io-client')(socketEndPoint, {connect_timeout: 2000});
+app.io = socket;
+
 socket.on('connect', function(){
-    debugSocket('connect');
-    app.emit("ring:io:connect");
+    debugSocket('connected to ' + socketEndPoint);
+    app.emit("io:connect", socket);
 });
-socket.on('event', function(data){
-    debugSocket('event');
-    app.emit("ring:io:event", data);
+
+socket.on('connect_timeout', function(){
+    debugSocket('connect_timeout', app.locals.config.serverUrl);
 });
-socket.on('disconnect', function(){
-    debugSocket('disconnect');
+
+socket.on("connect_error", function(err) {
+    debugSocket("connect_error", err);
+});
+
+socket.on("reconnect_attempt", function(err) {
+    debugSocket("reconnect_attempt", err);
+});
+
+socket.on("reconnect_failed", function(err) {
+    debugSocket("reconnect_failed", err);
+});
+
+socket.on("reconnect_error", function(err) {
+    debugSocket("reconnect_error", err);
 });
 
 /**

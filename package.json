@@ -6,7 +6,8 @@
     "start": "set DEBUG=server,socket & node ./server/bin/www",
     "start-client": "set DEBUG=ring:server,ring:socket,alarm-hook & node ./client/bin/www",
     "git-update": "git pull origin master",
-    "build": "npm git-update & npm install & npm start"
+    "build-server": "npm git-update & npm install & npm start",
+    "build-client": "npm git-update & npm install & npm start-client"
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -22,6 +23,7 @@
     "install": "^0.8.1",
     "jade": "~1.11.0",
     "jquery": "^3.1.1",
+    "lodash": "^4.16.4",
     "morgan": "~1.7.0",
     "mplayer": "^2.1.0",
     "npm": "^3.10.8",

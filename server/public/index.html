@@ -18,7 +18,7 @@
         <!--<div class="alert alert-danger" role="alert">Damn! Il y'a une erreur avec la sonnette, essai peut être un peu plus tard ou vient toquer à la porte.</div>-->
 
         <div class="center">
-            <button class="btn btn-primary btn-lg btn-block" ng-click="ring()" btn-busy="ringBusy" btn-busy-text="'Ça sonne !'">Faire sonner</button>
+            <button class="btn btn-primary btn-lg btn-block" ng-click="ring()" ng-disabled="!available">Faire sonner</button>
         </div>
     </div>
 

@@ -7,8 +7,8 @@
     "start-server": "npm start",
     "start-client": "set DEBUG=ring:server,ring:socket,alarm-hook & node ./client/bin/www",
     "git-update": "git pull origin master",
-    "build-server": "npm git-update & npm install & npm start",
-    "build-client": "npm git-update & npm install & npm start-client"
+    "build-server": "npm run git-update & npm install & npm start",
+    "build-client": "npm run git-update & npm install & npm run start-client"
   },
   "dependencies": {
     "angular": "^1.5.8",

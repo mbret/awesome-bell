@@ -11,7 +11,6 @@ var localConfig = {};
 var app = express();
 try {
     localConfig = require("./config.local");
-    console.log(localConfig);
 } catch (e) {
     // silent
 }

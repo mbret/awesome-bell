@@ -6,9 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var config = require("./config");
-// Express body-parser (only for post/put/... raw content)
-var getRawBody  = require('raw-body');
+var _ = require("lodash");
+var localConfig = {};
 var app = express();
+try {
+    localConfig = require("./config.local");
+    console.log(localConfig);
+} catch (e) {
+    // silent
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,8 +31,15 @@ app.use("/js", express.static(path.join(__dirname, '../node_modules')));
 
 app.use('/', routes);
 
+_.merge(config, localConfig);
 app.locals.config = config;
-req.app.locals.sleepMode = false;
+app.locals.sleepMode = false;
+
+// check admin password
+if (!app.locals.config.adminPassword) {
+    console.error("Please set an admin password before start the server.");
+    process.exit();
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

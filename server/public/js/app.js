@@ -1,9 +1,18 @@
 angular
     .module("ring", ["ngTouch", "btford.socket-io"])
     .factory('socket', function (socketFactory) {
-        return socketFactory({
-            ioSocket: io.connect("/server")
+        var socket = socketFactory({
+            ioSocket: io.connect("/server", {
+                query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
+            })
         });
+        socket.on("connect", function() {
+            console.log("connected");
+        });
+        socket.on("connect_error", function(err) {
+            console.error(err);
+        });
+        return socket;
     })
     .controller("mainController", function($scope, $http, socket) {
         $scope.ringBusy = false;

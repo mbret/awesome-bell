@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require("path");
+var jwt = require('jsonwebtoken');
 
 /**
  * Index
@@ -44,6 +45,18 @@ router.put("/state", function(req, res) {
     }
 
     return res.status(200).json();
+});
+
+router.post("/auth", function(req, res) {
+    var password = req.body.password;
+
+    if (password === req.app.locals.config.adminPassword) {
+        return res.status(200).json({
+            token: jwt.sign({role: "admin"}, req.app.locals.config.tokenSecret)
+        });
+    }
+
+    return res.status(400).json({});
 });
 
 module.exports = router;

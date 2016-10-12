@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('server');
 var debugSocket = require('debug')('socket');
 var http = require('http');
+var socketioJwt = require("socketio-jwt");
+var IoServer = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
@@ -21,7 +23,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
+var io = new IoServer(server, {});
 app.locals.io = io;
 
 /**
@@ -32,10 +34,17 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+// Namespace /server
 io.of("/server").on("connection", function (socket) {
     debugSocket("connection to /server");
 });
 
+// Namespace /client
+// This namespace is secured by jwt
+io.of("/client").use(socketioJwt.authorize({
+    secret: app.locals.config.tokenSecret,
+    handshake: true
+}));
 io.of("/client").on("connection", function (socket) {
     debugSocket("connection to /client");
     // we handle only one connection

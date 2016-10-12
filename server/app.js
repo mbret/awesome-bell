@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var MPlayer = require("mplayer");
 var routes = require('./routes/index');
 var config = require("./config");
 
@@ -24,8 +23,6 @@ app.use("/js", express.static(path.join(__dirname, '../node_modules')));
 app.use('/', routes);
 
 app.locals.config = config;
-app.locals.mPlayer = new MPlayer({debug: false, verbose: false});
-app.locals.playing = false;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

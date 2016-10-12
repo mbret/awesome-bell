@@ -22,6 +22,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
+app.locals.io = io;
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -30,13 +31,24 @@ var io = require('socket.io')(server);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-io.on('connection', function (socket) {
-    debugSocket("new connection");
+io.of("/server").on("connection", function (socket) {
+    debugSocket("connection to /server");
+});
+io.of("/client").on("connection", function (socket) {
+    debugSocket("connection to /client");
     // we handle only one connection
-    app.locals.socket = socket;
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
+    app.locals.socketRingClient = socket;
+
+    // tell everyone that a ring is available
+    io.of("/server").emit("client:connect");
+
+    socket.on("disconnect", function() {
+        debugSocket("disconnect from ring client");
+        // we handle only one connection
+        app.locals.socketRingClient = null;
+
+        // tell everyone the ring is disconnected
+        io.of("/server").emit("client:disconnect");
     });
 });
 

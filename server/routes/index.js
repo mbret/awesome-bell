@@ -16,4 +16,12 @@ router.post("/ring", function(req, res) {
     return res.json();
 });
 
+router.get("/client", function(req, res) {
+    if (req.app.locals.socketRingClient) {
+        return res.json({});
+    }
+
+    return res.status(404).json({});
+});
+
 module.exports = router;

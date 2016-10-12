@@ -7,20 +7,27 @@
     <link href="/js/tether/dist/css/tether.min.css" rel="stylesheet">
     <link href="/js/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/angular/angular.js"></script>
 </head>
 <body ng-app="ring" ng-controller="mainController">
 
     <div class="container">
+        <div class="alert alert-success" ng-if="available" role="alert">Sonnette connectée.</div>
+        <!--<div class="alert alert-info" role="alert">Ça sonne !</div>-->
+        <div class="alert alert-warning" role="alert" ng-if="!available">En attente de connexion de la sonnette...</div>
+        <!--<div class="alert alert-danger" role="alert">Damn! Il y'a une erreur avec la sonnette, essai peut être un peu plus tard ou vient toquer à la porte.</div>-->
+
         <div class="center">
             <button class="btn btn-primary btn-lg btn-block" ng-click="ring()" btn-busy="ringBusy" btn-busy-text="'Ça sonne !'">Faire sonner</button>
         </div>
     </div>
 
     <script src="/js/tether/dist/js/tether.min.js"></script>
+    <script src="/js/socket.io-client/socket.io.js"></script>
     <script src="/js/jquery/dist/jquery.min.js"></script>
     <script src="/js/hammerjs/hammer.min.js"></script>
-    <script src="/js/angular/angular.js"></script>
     <script src="/js/angular-touch/angular-touch.js"></script>
+    <script src="/js/angular-socket-io/socket.min.js"></script>
     <script src="/js/angular-hammer/angular.hammer.js"></script>
     <script src="/js/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/js/app.js"></script>

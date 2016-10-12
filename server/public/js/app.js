@@ -1,7 +1,13 @@
 angular
-    .module("ring", ["ngTouch"])
-    .controller("mainController", function($scope, $http) {
+    .module("ring", ["ngTouch", "btford.socket-io"])
+    .factory('socket', function (socketFactory) {
+        return socketFactory({
+            ioSocket: io.connect("/server")
+        });
+    })
+    .controller("mainController", function($scope, $http, socket) {
         $scope.ringBusy = false;
+        $scope.available = false;
 
         $scope.ring = function() {
             //$scope.ringBusy = true;
@@ -13,6 +19,25 @@ angular
                 .catch(function() {
 
                 });
+        };
+
+        checkAvailability();
+
+        function checkAvailability() {
+            $http.get("/client")
+                .then(function() {
+                    $scope.available = true;
+                });
+
+            socket.on("client:connect", function() {
+                $scope.available = true;
+                console.log("connect");
+            });
+
+            socket.on("client:disconnect", function() {
+                $scope.available = false;
+                console.log("disconnect");
+            });
         }
     })
     .directive('btnBusy', [function () {

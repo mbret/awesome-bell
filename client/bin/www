@@ -23,7 +23,7 @@ app.set('port', port);
 var server = http.createServer(app);
 app.http = server;
 debugSocket("init connection" + app.locals.config.serverUrl);
-var socket = require('socket.io-client')(app.locals.config.serverUrl);
+var socket = require('socket.io-client')(app.locals.config.serverUrl + "/client");
 app.io = socket;
 
 /**

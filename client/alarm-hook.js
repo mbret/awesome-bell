@@ -10,6 +10,11 @@ module.exports = function(app) {
     // we force POSIX path because I do not understand why but windows separator (\) does not work.
     filePath = filePath.replace(new RegExp('\\' + path.sep, 'g'), '/');
 
+    // tel the ring is available
+    app.on("ring:io:connect", function() {
+
+    });
+
     // make sure io exist
     app.once("ring:io:connect", function() {
 

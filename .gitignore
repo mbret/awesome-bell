@@ -1,5 +1,5 @@
 /node_modules/
 *.iml
 .idea
-client/config.local.js
-server/config.local.js
+/client/config.local.js
+/server/config.local.js

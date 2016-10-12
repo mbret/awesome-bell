@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
  * Index
  */
 router.get('/', function(req, res) {
-    res.render('index', { title: 'Express' });
+    res.render('index', { alias: req.app.locals.config.hostAlias });
 });
 
 router.post("/ring", function(req, res) {

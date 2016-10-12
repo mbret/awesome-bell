@@ -41,6 +41,11 @@ if (!app.locals.config.adminPassword) {
     process.exit();
 }
 
+// apply host alias
+if (app.locals.config.hostAlias.length > 0) {
+    app.locals.config.hostAlias = app.locals.config.hostAlias + "/";
+}
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

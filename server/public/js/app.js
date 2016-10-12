@@ -3,13 +3,17 @@ angular
     .constant("APP_CONFIG", APP_CONFIG)
     .service("baseUrl", function(APP_CONFIG) {
         return function(uri) {
-            // APP_CONFIG.hostAlias = "/";
+            if (!uri) {
+                uri = "";
+            }
             return APP_CONFIG.hostAlias + uri;
         }
     })
     .factory('socket', function (socketFactory, baseUrl) {
         var socket = socketFactory({
-            ioSocket: io.connect("/" + baseUrl("/server"), {})
+            ioSocket: io.connect("/server", {
+                path: baseUrl()
+            })
         });
         socket.on("connect", function() {
             console.log("connected");

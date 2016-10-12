@@ -5,7 +5,8 @@
   "scripts": {
     "start": "set DEBUG=server,socket & node ./server/bin/www",
     "start-client": "set DEBUG=ring:server,ring:socket,alarm-hook & node ./client/bin/www",
-    "git-update": "git pull origin master"
+    "git-update": "git pull origin master",
+    "build": "npm git-update & npm install & npm start"
   },
   "dependencies": {
     "angular": "^1.5.8",

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set DEBUG=ring:server,ring:socket & node ./server/bin/www",
+    "start": "set DEBUG=server,socket & node ./server/bin/www",
     "start-client": "set DEBUG=ring:server,ring:socket,alarm-hook & node ./client/bin/www"
   },
   "dependencies": {

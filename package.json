@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "set DEBUG=server,socket & node ./server/bin/www",
+    "start-server": "npm start",
     "start-client": "set DEBUG=ring:server,ring:socket,alarm-hook & node ./client/bin/www",
     "git-update": "git pull origin master",
     "build-server": "npm git-update & npm install & npm start",

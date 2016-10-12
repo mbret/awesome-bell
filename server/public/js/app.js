@@ -12,7 +12,7 @@ angular
     .factory('socket', function (socketFactory, baseUrl) {
         var socket = socketFactory({
             ioSocket: io.connect("/server", {
-                path: baseUrl()
+                path: baseUrl("/socket.io")
             })
         });
         socket.on("connect", function() {

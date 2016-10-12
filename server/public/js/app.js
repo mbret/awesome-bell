@@ -1,8 +1,14 @@
 angular
     .module("ring", ["ngTouch", "btford.socket-io"])
-    .factory('socket', function (socketFactory) {
+    .constant("APP_CONFIG", APP_CONFIG)
+    .service("baseUrl", function(APP_CONFIG) {
+        return function(uri) {
+            return APP_CONFIG.hostAlias + uri;
+        }
+    })
+    .factory('socket', function (socketFactory, baseUrl) {
         var socket = socketFactory({
-            ioSocket: io.connect("/server", {
+            ioSocket: io.connect(baseUrl("/server"), {
                 query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
             })
         });
@@ -14,13 +20,13 @@ angular
         });
         return socket;
     })
-    .controller("mainController", function($scope, $http, socket) {
+    .controller("mainController", function($scope, $http, socket, baseUrl) {
         $scope.ringBusy = false;
         $scope.available = false;
 
         $scope.ring = function() {
             //$scope.ringBusy = true;
-            $http.post("/ring", {})
+            $http.post(baseUrl("/ring"), {})
                 .then(function() {
                     console.log("end");
                     $scope.ringBusy = false;
@@ -33,7 +39,7 @@ angular
         checkAvailability();
 
         function checkAvailability() {
-            $http.get("/client")
+            $http.get(baseUrl("/client"))
                 .then(function() {
                     $scope.available = true;
                 });

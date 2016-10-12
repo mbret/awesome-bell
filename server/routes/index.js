@@ -9,6 +9,15 @@ var jwt = require('jsonwebtoken');
 router.get('/', function(req, res) {
     res.render('index', { alias: req.app.locals.config.hostAlias });
 });
+router.get("/configuration.js", function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', 0);
+    res.send('window.APP_CONFIG = ' + JSON.stringify( {
+            hostAlias: req.app.locals.config.hostAlias
+        } ) + ';');
+});
 
 router.post("/ring", function(req, res) {
     if (req.app.locals.sleepMode) {

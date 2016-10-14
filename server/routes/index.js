@@ -36,7 +36,7 @@ router.post("/ring", function(req, res) {
 
 router.get("/client", function(req, res) {
     if (req.app.locals.socketRingClient) {
-        return res.json({});
+        return res.status(200).json({});
     }
 
     return res.status(404).json({});

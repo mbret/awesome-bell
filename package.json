@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set DEBUG=server,socket & node ./server/bin/www",
-    "start-server": "npm start",
-    "start-client": "set DEBUG=ring:server,ring:socket,alarm-hook & node ./client/bin/www",
-    "git-update": "git pull origin master",
-    "build-server": "npm run git-update & npm install & npm start",
-    "build-client": "npm run git-update & npm install & npm run start-client"
+    "update": "git pull origin master",
+    "start": "node ./server/bin/www",
+    "start:dev": "DEBUG=server,socket npm run start",
+    "start:dev--windows": "set DEBUG=server,socket npm run start",
+    "start-client": "node ./client/bin/www",
+    "start-client:dev": "DEBUG=ring:server,ring:socket,alarm-hook && npm run start-client",
+    "start-client:dev--windows": "set DEBUG=ring:server,ring:socket,alarm-hook && npm run start-client",
+    "git-update": "git pull origin master && npm install"
   },
   "dependencies": {
     "angular": "^1.5.8",

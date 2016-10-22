@@ -5,11 +5,11 @@
   "scripts": {
     "update": "git pull origin master && npm install",
     "start": "node ./server/bin/www",
-    "start:dev": "DEBUG=server,socket npm run start",
-    "start:dev--windows": "set DEBUG=server,socket && npm run start",
+    "start:debug": "DEBUG=ab:* npm run start",
+    "start:debug--windows": "set DEBUG=ab:* && npm run start",
     "start-client": "node ./client/bin/www",
     "start-client:dev": "DEBUG=ring:server,ring:socket,alarm-hook && npm run start-client",
-    "start-client:dev--windows": "set DEBUG=ring:server,ring:socket,alarm-hook && npm run start-client"
+    "start-client:debug--windows": "set DEBUG=ring:server,ring:socket,alarm-hook && npm run start-client"
   },
   "dependencies": {
     "angular": "^1.5.8",

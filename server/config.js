@@ -5,5 +5,5 @@ module.exports = {
     resourcesPath: path.join(__dirname, "resources"),
     tokenSecret: "foo",
     hostAlias: "",
-    port: 3000
+    port: 3002
 };

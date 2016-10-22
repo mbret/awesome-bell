@@ -5,8 +5,8 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('server');
-var debugSocket = require('debug')('socket');
+var debug = require('debug')('ab:server');
+var debugSocket = require('debug')('ab:socket');
 var http = require('http');
 var socketioJwt = require("socketio-jwt");
 var IoServer = require('socket.io');
@@ -36,32 +36,44 @@ server.on('listening', onListening);
 
 // Namespace /server
 io.of("/server").on("connection", function (socket) {
-    debugSocket("connection to /server");
+    debugSocket("new connection to socket server");
 });
 
-// Namespace /client
+// Namespace /speaker
 // This namespace is secured by jwt
-io.of("/client").use(socketioJwt.authorize({
-    secret: app.locals.config.tokenSecret,
-    handshake: true
-}));
-io.of("/client").on("connection", function (socket) {
-    debugSocket("connection to /client");
-    // we handle only one connection
-    app.locals.socketRingClient = socket;
-
-    // tell everyone that a ring is available
-    io.of("/server").emit("client:connect");
-
-    socket.on("disconnect", function() {
-        debugSocket("disconnect from ring client");
+io.of("/speaker")
+    .on("connection", socketioJwt.authorize({
+        secret: app.locals.config.tokenSecret,
+    }))
+    .on("authenticated", function (socket) {
+        debugSocket("new speaker connected");
         // we handle only one connection
-        app.locals.socketRingClient = null;
+        app.locals.socketRingClient = socket;
 
-        // tell everyone the ring is disconnected
-        io.of("/server").emit("client:disconnect");
+        // tell everyone that a ring is available
+        io.of("/server").emit("client:connect");
+
+        socket.on("disconnect", function() {
+            debugSocket("disconnect from ring client");
+            // we handle only one connection
+            app.locals.socketRingClient = null;
+
+            // tell everyone the ring is disconnected
+            io.of("/server").emit("client:disconnect");
+        });
     });
-});
+
+// Namespace trigger client
+io.of("/triggers")
+    .on("connection", socketioJwt.authorize({
+        secret: app.locals.config.tokenSecret,
+    }))
+    .on("authenticated", function (socket) {
+        debugSocket("new trigger connected");
+        socket.on("disconnect", function() {
+            debugSocket("trigger disconnect");
+        });
+    });
 
 /**
  * Normalize a port into a number, string, or false.
@@ -116,9 +128,11 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    var addr = server.address();
+    let address = addr.address;
+    if (address === "::") {
+        address = "localhost";
+    }
+    var bind = addr.port;
+    debug('Listening on http://' + address + ':' + bind);
 }
